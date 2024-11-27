@@ -7,61 +7,77 @@ const overlay = document.getElementById('overlay');
 const urlDisplay = document.getElementById('url-display');
 
 let stream;
+let isScanning = false;
 
-// Initialize QR scanning
 scanButton.addEventListener('click', async () => {
   cameraView.classList.remove('hidden');
   successPage.classList.add('hidden');
 
-  // Access camera
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    // Access the camera
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' },
+    });
     video.srcObject = stream;
 
     // Start scanning
-    startScan();
+    video.onloadedmetadata = () => {
+      video.play();
+      startScan();
+    };
   } catch (error) {
     alert('Camera access denied or unavailable.');
   }
 });
 
-// Scan QR Code
 async function startScan() {
   const ctx = overlay.getContext('2d');
   overlay.width = video.videoWidth;
   overlay.height = video.videoHeight;
+  isScanning = true;
 
   const scan = () => {
-    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+    if (isScanning && video.readyState === video.HAVE_ENOUGH_DATA) {
+      // Draw video frame on canvas
       ctx.drawImage(video, 0, 0, overlay.width, overlay.height);
+
+      // Get image data from canvas
       const imageData = ctx.getImageData(0, 0, overlay.width, overlay.height);
-      const code = jsQR(imageData.data, overlay.width, overlay.height);
+
+      // Decode QR code
+      const code = jsQR(imageData.data, overlay.width, overlay.height, {
+        inversionAttempts: 'dontInvert',
+      });
 
       if (code) {
+        // QR code detected
+        isScanning = false;
         stopScan();
         displaySuccess(code.data);
+        return;
       }
     }
-    requestAnimationFrame(scan);
+
+    // Keep scanning
+    if (isScanning) {
+      requestAnimationFrame(scan);
+    }
   };
 
   scan();
 }
 
-// Stop camera and QR scanning
 function stopScan() {
   video.srcObject = null;
-  stream.getTracks().forEach(track => track.stop());
+  stream.getTracks().forEach((track) => track.stop());
 }
 
-// Display the success page
 function displaySuccess(url) {
   cameraView.classList.add('hidden');
   successPage.classList.remove('hidden');
   urlDisplay.textContent = url;
 }
 
-// Back button to rescan
 backButton.addEventListener('click', () => {
   successPage.classList.add('hidden');
   scanButton.click();
