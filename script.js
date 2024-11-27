@@ -14,13 +14,17 @@ scanButton.addEventListener('click', async () => {
   successPage.classList.add('hidden');
 
   try {
-    // Access the camera
+    // Request camera access with video constraints
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' },
+      video: {
+        facingMode: 'environment',
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      },
     });
     video.srcObject = stream;
 
-    // Start scanning when the video metadata is loaded
+    // Start scanning after video metadata is loaded
     video.onloadedmetadata = () => {
       video.play();
       startScan();
@@ -38,26 +42,18 @@ async function startScan() {
 
   const scan = () => {
     if (isScanning && video.readyState === video.HAVE_ENOUGH_DATA) {
-      // Draw the video frame onto the canvas
       ctx.drawImage(video, 0, 0, overlay.width, overlay.height);
-
-      // Extract the image data from the canvas
       const imageData = ctx.getImageData(0, 0, overlay.width, overlay.height);
-
-      // Use jsQR to decode the QR code
       const code = jsQR(imageData.data, overlay.width, overlay.height, {
         inversionAttempts: 'dontInvert',
       });
 
       if (code) {
-        // QR code detected, stop scanning
         isScanning = false;
         displaySuccess(code.data);
         return;
       }
     }
-
-    // Continue scanning
     if (isScanning) {
       requestAnimationFrame(scan);
     }
@@ -67,26 +63,23 @@ async function startScan() {
 }
 
 function stopScan() {
-  // Stop the video stream and release the camera
   if (stream) {
     const tracks = stream.getTracks();
-    tracks.forEach((track) => track.stop()); // Explicitly stop each track
-    stream = null; // Clear the stream reference
+    tracks.forEach((track) => track.stop());
+    stream = null;
   }
-
-  // Stop the video element
   video.srcObject = null;
   video.pause();
 }
 
 function displaySuccess(url) {
-  stopScan(); // Ensure the camera is stopped
-  cameraView.classList.add('hidden'); // Hide the camera view
-  successPage.classList.remove('hidden'); // Show the success page
-  urlDisplay.textContent = url; // Display the scanned URL
+  stopScan();
+  cameraView.classList.add('hidden');
+  successPage.classList.remove('hidden');
+  urlDisplay.textContent = url;
 }
 
 backButton.addEventListener('click', () => {
   successPage.classList.add('hidden');
-  scanButton.click(); // Restart the scanning process
+  scanButton.click();
 });
