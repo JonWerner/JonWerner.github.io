@@ -6,7 +6,7 @@ const video = document.getElementById('video');
 const overlay = document.getElementById('overlay');
 const urlDisplay = document.getElementById('url-display');
 
-let stream;
+let stream = null;
 let isScanning = false;
 
 scanButton.addEventListener('click', async () => {
@@ -20,13 +20,13 @@ scanButton.addEventListener('click', async () => {
     });
     video.srcObject = stream;
 
-    // Start scanning
+    // Start scanning when the video metadata is loaded
     video.onloadedmetadata = () => {
       video.play();
       startScan();
     };
   } catch (error) {
-    alert('Camera access denied or unavailable.');
+    alert('Unable to access the camera. Please check your settings.');
   }
 });
 
@@ -38,26 +38,26 @@ async function startScan() {
 
   const scan = () => {
     if (isScanning && video.readyState === video.HAVE_ENOUGH_DATA) {
-      // Draw video frame on canvas
+      // Draw the video frame onto the canvas
       ctx.drawImage(video, 0, 0, overlay.width, overlay.height);
 
-      // Get image data from canvas
+      // Extract the image data from the canvas
       const imageData = ctx.getImageData(0, 0, overlay.width, overlay.height);
 
-      // Decode QR code
+      // Use jsQR to decode the QR code
       const code = jsQR(imageData.data, overlay.width, overlay.height, {
         inversionAttempts: 'dontInvert',
       });
 
       if (code) {
-        // QR code detected
+        // QR code detected, stop scanning
         isScanning = false;
         displaySuccess(code.data);
         return;
       }
     }
 
-    // Keep scanning
+    // Continue scanning
     if (isScanning) {
       requestAnimationFrame(scan);
     }
@@ -67,20 +67,26 @@ async function startScan() {
 }
 
 function stopScan() {
+  // Stop the video stream and release the camera
   if (stream) {
-    stream.getTracks().forEach((track) => track.stop());
+    const tracks = stream.getTracks();
+    tracks.forEach((track) => track.stop()); // Explicitly stop each track
+    stream = null; // Clear the stream reference
   }
+
+  // Stop the video element
   video.srcObject = null;
+  video.pause();
 }
 
 function displaySuccess(url) {
-  stopScan(); // Stop camera
-  cameraView.classList.add('hidden'); // Hide camera view
-  successPage.classList.remove('hidden'); // Show success page
-  urlDisplay.textContent = url; // Display the URL
+  stopScan(); // Ensure the camera is stopped
+  cameraView.classList.add('hidden'); // Hide the camera view
+  successPage.classList.remove('hidden'); // Show the success page
+  urlDisplay.textContent = url; // Display the scanned URL
 }
 
 backButton.addEventListener('click', () => {
   successPage.classList.add('hidden');
-  scanButton.click();
+  scanButton.click(); // Restart the scanning process
 });
