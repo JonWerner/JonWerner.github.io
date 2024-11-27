@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
   <div class="container">
     <button id="scan-button" class="button">Scan</button>
     <div id="camera-view" class="hidden">
       <canvas id="overlay"></canvas>
-      <video id="video" autoplay></video>
+      <video id="video" autoplay playsinline></video>
       <div class="guides">
         <div class="guide"></div>
       </div>
@@ -23,6 +24,5 @@
     </div>
   </div>
   <script src="script.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 </body>
 </html>
