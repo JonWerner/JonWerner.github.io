@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f4f4f4;
+}
+
+.container {
+  text-align: center;
+}
+
+.button {
+  background: #007BFF;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+#camera-view {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+canvas {
+  display: none;
+}
+
+.guides .guide {
+  position: absolute;
+  border: 2px solid #00FF00;
+  width: 60%;
+  height: 30%;
+  top: 35%;
+  left: 20%;
+  pointer-events: none;
+}
