@@ -1,5 +1,4 @@
 const scanButton = document.getElementById('scan-button');
-const backButton = document.getElementById('back-button');
 const cameraView = document.getElementById('camera-view');
 const successPage = document.getElementById('success-page');
 const video = document.getElementById('video');
@@ -20,7 +19,7 @@ scanButton.addEventListener('click', async () => {
     });
     video.srcObject = stream;
 
-    // Start scanning
+    // Start scanning when the video is ready
     video.onloadedmetadata = () => {
       video.play();
       startScan();
@@ -68,17 +67,23 @@ async function startScan() {
 }
 
 function stopScan() {
+  // Stop the camera
   video.srcObject = null;
-  stream.getTracks().forEach((track) => track.stop());
+  if (stream) {
+    stream.getTracks().forEach((track) => track.stop());
+  }
+  // Hide the camera view
+  cameraView.classList.add('hidden');
 }
 
 function displaySuccess(url) {
-  cameraView.classList.add('hidden');
+  // Display the success page with the URL
   successPage.classList.remove('hidden');
   urlDisplay.textContent = url;
 }
 
-backButton.addEventListener('click', () => {
+// Automatically restart scanning when clicking the "Scan" button
+document.getElementById('scan-button').addEventListener('click', () => {
+  cameraView.classList.add('hidden');
   successPage.classList.add('hidden');
-  scanButton.click();
 });
