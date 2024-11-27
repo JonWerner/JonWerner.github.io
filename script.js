@@ -1,4 +1,5 @@
 const scanButton = document.getElementById('scan-button');
+const backButton = document.getElementById('back-button');
 const cameraView = document.getElementById('camera-view');
 const successPage = document.getElementById('success-page');
 const video = document.getElementById('video');
@@ -19,7 +20,7 @@ scanButton.addEventListener('click', async () => {
     });
     video.srcObject = stream;
 
-    // Start scanning when the video is ready
+    // Start scanning
     video.onloadedmetadata = () => {
       video.play();
       startScan();
@@ -51,7 +52,6 @@ async function startScan() {
       if (code) {
         // QR code detected
         isScanning = false;
-        stopScan();
         displaySuccess(code.data);
         return;
       }
@@ -67,23 +67,20 @@ async function startScan() {
 }
 
 function stopScan() {
-  // Stop the camera
-  video.srcObject = null;
   if (stream) {
     stream.getTracks().forEach((track) => track.stop());
   }
-  // Hide the camera view
-  cameraView.classList.add('hidden');
+  video.srcObject = null;
 }
 
 function displaySuccess(url) {
-  // Display the success page with the URL
-  successPage.classList.remove('hidden');
-  urlDisplay.textContent = url;
+  stopScan(); // Stop camera
+  cameraView.classList.add('hidden'); // Hide camera view
+  successPage.classList.remove('hidden'); // Show success page
+  urlDisplay.textContent = url; // Display the URL
 }
 
-// Automatically restart scanning when clicking the "Scan" button
-document.getElementById('scan-button').addEventListener('click', () => {
-  cameraView.classList.add('hidden');
+backButton.addEventListener('click', () => {
   successPage.classList.add('hidden');
+  scanButton.click();
 });
