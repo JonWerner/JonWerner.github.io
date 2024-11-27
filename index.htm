@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Scanner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <button id="scan-button" class="button">Scan</button>
+    <div id="camera-view" class="hidden">
+      <canvas id="overlay"></canvas>
+      <video id="video" autoplay></video>
+      <div class="guides">
+        <div class="guide"></div>
+      </div>
+    </div>
+    <div id="success-page" class="hidden">
+      <h1>QR Code Scanned!</h1>
+      <p id="url-display"></p>
+      <button id="back-button" class="button">Scan Again</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+</body>
+</html>
