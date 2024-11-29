@@ -54,12 +54,15 @@ async function startScan() {
       });
 
       if (code) {
-        // QR code detected
-        isScanning = false;
-        stopScan();
-        alert(`QR Code Scanned: ${code.data}`); // Optional: Display the scanned URL
-        resetView();
-        return;
+        // Validate the scanned QR code
+        if (isValidUrl(code.data)) {
+          // QR code is valid and contains a URL
+          isScanning = false;
+          stopScan();
+          alert(`Valid URL Scanned: ${code.data}`); // Optional: Display the scanned URL
+          resetView();
+          return;
+        }
       }
     }
 
@@ -69,6 +72,15 @@ async function startScan() {
   };
 
   scan();
+}
+
+function isValidUrl(data) {
+  try {
+    const url = new URL(data);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch (_) {
+    return false;
+  }
 }
 
 function stopScan() {
