@@ -23,7 +23,7 @@ body {
 }
 
 .hidden {
-  display: none; /* Ensure the viewport is hidden initially */
+  display: none;
 }
 
 #camera-view {
@@ -33,7 +33,7 @@ body {
   margin: auto;
   border: 5px solid #FFFFFF; /* White border */
   border-radius: 15px; /* Rounded corners */
-  display: none; /* Viewport hidden until activated */
+  display: none; /* Hidden initially */
   justify-content: center;
   align-items: center;
   background: #000; /* Black background for better contrast */
