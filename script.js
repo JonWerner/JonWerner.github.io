@@ -1,20 +1,18 @@
 const scanButton = document.getElementById('scan-button');
-const backButton = document.getElementById('back-button');
 const cameraView = document.getElementById('camera-view');
-const successPage = document.getElementById('success-page');
 const video = document.getElementById('video');
 const overlay = document.getElementById('overlay');
-const urlDisplay = document.getElementById('url-display');
 
 let stream = null;
 let isScanning = false;
 
 scanButton.addEventListener('click', async () => {
-  cameraView.style.display = 'flex'; // Show the camera viewport
-  successPage.classList.add('hidden');
+  // Show the camera viewport and start scanning
+  cameraView.style.display = 'flex';
+  scanButton.style.display = 'none'; // Hide the scan button while scanning
 
   try {
-    // Request camera access with video constraints
+    // Request camera access
     stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: 'environment',
@@ -24,13 +22,14 @@ scanButton.addEventListener('click', async () => {
     });
     video.srcObject = stream;
 
-    // Start scanning after video metadata is loaded
+    // Start scanning after the video is ready
     video.onloadedmetadata = () => {
       video.play();
       startScan();
     };
   } catch (error) {
     alert('Unable to access the camera. Please check your settings.');
+    resetView(); // Reset view if camera access fails
   }
 });
 
@@ -44,8 +43,8 @@ async function startScan() {
     if (isScanning && video.readyState === video.HAVE_ENOUGH_DATA) {
       ctx.drawImage(video, 0, 0, overlay.width, overlay.height);
       const imageData = ctx.getImageData(
-        overlay.width * 0.2, // Start at left edge of the guide
-        overlay.height * 0.35, // Start at top edge of the guide
+        overlay.width * 0.2, // Left edge of the guide
+        overlay.height * 0.35, // Top edge of the guide
         overlay.width * 0.6, // Width of the guide
         overlay.height * 0.3 // Height of the guide
       );
@@ -55,8 +54,11 @@ async function startScan() {
       });
 
       if (code) {
+        // QR code detected
         isScanning = false;
-        displaySuccess(code.data);
+        stopScan();
+        alert(`QR Code Scanned: ${code.data}`); // Optional: Display the scanned URL
+        resetView();
         return;
       }
     }
@@ -70,6 +72,7 @@ async function startScan() {
 }
 
 function stopScan() {
+  // Stop the camera stream
   if (stream) {
     const tracks = stream.getTracks();
     tracks.forEach((track) => track.stop());
@@ -79,14 +82,8 @@ function stopScan() {
   video.pause();
 }
 
-function displaySuccess(url) {
-  stopScan();
-  cameraView.style.display = 'none'; // Hide the camera viewport
-  successPage.classList.remove('hidden'); // Show the success page
-  urlDisplay.textContent = url;
+function resetView() {
+  // Hide the camera viewport and show the scan button
+  cameraView.style.display = 'none';
+  scanButton.style.display = 'inline-block';
 }
-
-backButton.addEventListener('click', () => {
-  successPage.classList.add('hidden');
-  scanButton.click(); // Restart the scanning process
-});
