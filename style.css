@@ -33,7 +33,7 @@ body {
   margin: auto;
   border: 5px solid #FFFFFF; /* White border */
   border-radius: 15px; /* Rounded corners */
-  display: flex;
+  display: none; /* Viewport hidden until activated */
   justify-content: center;
   align-items: center;
   background: #000; /* Black background for better contrast */
@@ -47,15 +47,20 @@ video {
 }
 
 canvas {
-  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.guides .guide {
+.guides {
   position: absolute;
-  border: 2px dashed #FFFFFF; /* White dashed border for guides */
+  pointer-events: none;
   width: 60%;
   height: 30%;
   top: 35%;
   left: 20%;
-  pointer-events: none;
+  border: 2px solid #FFFFFF; /* White border for the guide box */
+  border-radius: 15px;
 }
