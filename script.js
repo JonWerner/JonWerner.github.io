@@ -10,7 +10,7 @@ let stream = null;
 let isScanning = false;
 
 scanButton.addEventListener('click', async () => {
-  cameraView.classList.remove('hidden');
+  cameraView.classList.remove('hidden'); // Show the camera viewport
   successPage.classList.add('hidden');
 
   try {
@@ -74,12 +74,12 @@ function stopScan() {
 
 function displaySuccess(url) {
   stopScan();
-  cameraView.classList.add('hidden');
-  successPage.classList.remove('hidden');
+  cameraView.classList.add('hidden'); // Hide the camera viewport
+  successPage.classList.remove('hidden'); // Show the success page
   urlDisplay.textContent = url;
 }
 
 backButton.addEventListener('click', () => {
   successPage.classList.add('hidden');
-  scanButton.click();
+  scanButton.click(); // Restart the scanning process
 });
