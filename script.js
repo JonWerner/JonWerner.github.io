@@ -10,7 +10,7 @@ let stream = null;
 let isScanning = false;
 
 scanButton.addEventListener('click', async () => {
-  cameraView.classList.remove('hidden'); // Show the camera viewport
+  cameraView.style.display = 'flex'; // Show the camera viewport
   successPage.classList.add('hidden');
 
   try {
@@ -43,8 +43,14 @@ async function startScan() {
   const scan = () => {
     if (isScanning && video.readyState === video.HAVE_ENOUGH_DATA) {
       ctx.drawImage(video, 0, 0, overlay.width, overlay.height);
-      const imageData = ctx.getImageData(0, 0, overlay.width, overlay.height);
-      const code = jsQR(imageData.data, overlay.width, overlay.height, {
+      const imageData = ctx.getImageData(
+        overlay.width * 0.2, // Start at left edge of the guide
+        overlay.height * 0.35, // Start at top edge of the guide
+        overlay.width * 0.6, // Width of the guide
+        overlay.height * 0.3 // Height of the guide
+      );
+
+      const code = jsQR(imageData.data, overlay.width * 0.6, overlay.height * 0.3, {
         inversionAttempts: 'dontInvert',
       });
 
@@ -54,6 +60,7 @@ async function startScan() {
         return;
       }
     }
+
     if (isScanning) {
       requestAnimationFrame(scan);
     }
@@ -74,7 +81,7 @@ function stopScan() {
 
 function displaySuccess(url) {
   stopScan();
-  cameraView.classList.add('hidden'); // Hide the camera viewport
+  cameraView.style.display = 'none'; // Hide the camera viewport
   successPage.classList.remove('hidden'); // Show the success page
   urlDisplay.textContent = url;
 }
