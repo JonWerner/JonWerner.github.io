@@ -56,7 +56,7 @@ async function startScan() {
       if (code) {
         // Validate the scanned QR code
         if (isValidUrl(code.data)) {
-          // QR code is valid and contains a URL
+          // QR code is valid and contains the required URL
           isScanning = false;
           stopScan();
           alert(`Valid URL Scanned: ${code.data}`); // Optional: Display the scanned URL
@@ -77,7 +77,7 @@ async function startScan() {
 function isValidUrl(data) {
   try {
     const url = new URL(data);
-    return url.protocol === 'http:' || url.protocol === 'https:';
+    return url.href.startsWith("https://qr.eventmagic.com"); // Accept only URLs with this base
   } catch (_) {
     return false;
   }
