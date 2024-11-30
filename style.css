@@ -39,6 +39,18 @@ body {
   background: #000; /* Black background for better contrast */
 }
 
+.overlay-text {
+  position: absolute;
+  top: 10%; /* Position the text near the top */
+  width: 100%; /* Ensure it spans the entire viewport width */
+  text-align: center; /* Center the text horizontally */
+  color: #FFFFFF; /* White text */
+  font-size: 1.2em; /* Adjust font size for readability */
+  font-weight: bold;
+  z-index: 2; /* Ensure it appears above other elements */
+  pointer-events: none; /* Prevent interaction */
+}
+
 video {
   width: 100%;
   height: 100%;
@@ -63,4 +75,5 @@ canvas {
   left: 20%;
   border: 2px solid #FFFFFF; /* White border for the guide box */
   border-radius: 15px;
+  z-index: 1; /* Ensure it's below the text */
 }
