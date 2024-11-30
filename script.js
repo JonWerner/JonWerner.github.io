@@ -77,7 +77,7 @@ async function startScan() {
 function isValidUrl(data) {
   try {
     const url = new URL(data);
-    return url.href.includes("qr.eventmagic.co"); // Accept URLs containing this substring
+    return url.href.includes("qr.eventmagic.com"); // Accept URLs containing this substring
   } catch (_) {
     return false;
   }
