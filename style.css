@@ -31,6 +31,18 @@ body {
   background: #000; /* Black background for better contrast */
 }
 
+.overlay-text {
+  position: absolute;
+  top: 25%; /* Position above the guide box */
+  width: 100%; /* Full width of the viewport */
+  text-align: center; /* Center horizontally */
+  color: #FFFFFF; /* White text for visibility */
+  font-size: 1.2em; /* Adjust font size for readability */
+  font-weight: bold;
+  z-index: 2; /* Ensure text appears above other elements */
+  pointer-events: none; /* Prevent interaction */
+}
+
 .guides {
   position: absolute;
   width: 60%;
@@ -40,19 +52,7 @@ body {
   border: 2px solid #FFFFFF; /* White border for the guide box */
   border-radius: 15px;
   pointer-events: none;
-  z-index: 1; /* Ensure it appears above the video and canvas */
-}
-
-.overlay-text {
-  position: absolute;
-  width: 100%; /* Match the width of the viewport */
-  text-align: center; /* Center the text horizontally */
-  color: #FFFFFF; /* White text for readability */
-  font-size: 1.2em; /* Adjust font size for visibility */
-  font-weight: bold;
-  top: -30px; /* Position the text above the guide */
-  z-index: 2; /* Ensure the text appears above the guide */
-  pointer-events: none; /* Prevent interaction */
+  z-index: 1; /* Ensure it appears below the overlay text */
 }
 
 video {
