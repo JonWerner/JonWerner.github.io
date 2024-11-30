@@ -7,21 +7,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-  <div class="container">
-    <button id="scan-button" class="button">Scan</button>
-    <div id="camera-view" class="hidden">
+  <div id="camera-view" class="hidden">
+    <div class="guides">
       <div class="overlay-text">Center your badge QR inside the square guide</div>
-      <canvas id="overlay"></canvas>
-      <video id="video" autoplay playsinline></video>
-    <div class="guides"></div>
     </div>
-    <div id="success-page" class="hidden">
-      <h1>QR Code Scanned!</h1>
-      <p id="url-display"></p>
-      <button id="back-button" class="button">Scan Again</button>
-    </div>
+    <canvas id="overlay"></canvas>
+    <video id="video" autoplay playsinline></video>
   </div>
+  <button id="scan-button" class="button">Scan</button>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
