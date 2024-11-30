@@ -8,10 +8,6 @@ body {
   background: #f4f4f4;
 }
 
-.container {
-  text-align: center;
-}
-
 .button {
   background: #007BFF;
   color: white;
@@ -20,10 +16,6 @@ body {
   font-size: 16px;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.hidden {
-  display: none;
 }
 
 #camera-view {
@@ -39,15 +31,27 @@ body {
   background: #000; /* Black background for better contrast */
 }
 
+.guides {
+  position: absolute;
+  width: 60%;
+  height: 30%;
+  top: 35%;
+  left: 20%;
+  border: 2px solid #FFFFFF; /* White border for the guide box */
+  border-radius: 15px;
+  pointer-events: none;
+  z-index: 1; /* Ensure it appears above the video and canvas */
+}
+
 .overlay-text {
   position: absolute;
-  top: 10%; /* Position the text near the top */
-  width: 100%; /* Ensure it spans the entire viewport width */
+  width: 100%; /* Match the width of the viewport */
   text-align: center; /* Center the text horizontally */
-  color: #FFFFFF; /* White text */
-  font-size: 1.2em; /* Adjust font size for readability */
+  color: #FFFFFF; /* White text for readability */
+  font-size: 1.2em; /* Adjust font size for visibility */
   font-weight: bold;
-  z-index: 2; /* Ensure it appears above other elements */
+  top: -30px; /* Position the text above the guide */
+  z-index: 2; /* Ensure the text appears above the guide */
   pointer-events: none; /* Prevent interaction */
 }
 
@@ -64,16 +68,4 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-.guides {
-  position: absolute;
-  pointer-events: none;
-  width: 60%;
-  height: 30%;
-  top: 35%;
-  left: 20%;
-  border: 2px solid #FFFFFF; /* White border for the guide box */
-  border-radius: 15px;
-  z-index: 1; /* Ensure it's below the text */
 }
