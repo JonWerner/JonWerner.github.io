@@ -56,7 +56,7 @@ async function startScan() {
       if (code) {
         // Validate the scanned QR code
         if (isValidUrl(code.data)) {
-          // QR code is valid and contains the required URL
+          // QR code is valid and contains the required substring
           isScanning = false;
           stopScan();
           alert(`Valid URL Scanned: ${code.data}`); // Optional: Display the scanned URL
@@ -77,7 +77,7 @@ async function startScan() {
 function isValidUrl(data) {
   try {
     const url = new URL(data);
-    return url.href.includes("qr.eventmagic.co"); // Accept only URLs with this base
+    return url.href.includes("qr.eventmagic.com"); // Accept URLs containing this substring
   } catch (_) {
     return false;
   }
