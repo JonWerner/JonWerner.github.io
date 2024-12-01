@@ -58,9 +58,10 @@ async function startScan() {
         if (isValidUrl(code.data)) {
           // QR code is valid and contains the required substring
           isScanning = false;
-          provideHapticFeedback(); // Trigger haptic feedback
           stopScan();
           showSuccessDialog(code.data); // Display success dialog
+          provideHapticFeedback(); // Trigger haptic feedback
+
           resetView();
           return;
         }
