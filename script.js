@@ -58,8 +58,8 @@ async function startScan() {
         if (isValidUrl(code.data)) {
           // QR code is valid and contains the required substring
           isScanning = false;
+          provideHapticFeedback(); // Trigger haptic feedback
           stopScan();
-          navigator.vibrate(500);
           showSuccessDialog(code.data); // Display success dialog
           resetView();
           return;
@@ -78,9 +78,15 @@ async function startScan() {
 function isValidUrl(data) {
   try {
     const url = new URL(data);
-    return url.href.includes("qr.eventmagic.co"); // Accept URLs containing this substring
+    return url.href.includes("qr.eventmagic.com"); // Accept URLs containing this substring
   } catch (_) {
     return false;
+  }
+}
+
+function provideHapticFeedback() {
+  if (navigator.vibrate) {
+    navigator.vibrate(500); // Vibrate for 500ms
   }
 }
 
