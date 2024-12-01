@@ -59,7 +59,7 @@ async function startScan() {
           // QR code is valid and contains the required substring
           isScanning = false;
           stopScan();
-          navigator.vibrate(20);
+          navigator.vibrate(500);
           showSuccessDialog(code.data); // Display success dialog
           resetView();
           return;
