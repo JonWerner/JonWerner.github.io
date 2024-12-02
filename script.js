@@ -39,7 +39,7 @@ async function startScan() {
   overlay.height = video.videoHeight;
   isScanning = true;
 
-  const scan = () => {
+  const scan = async () => {
     if (isScanning && video.readyState === video.HAVE_ENOUGH_DATA) {
       ctx.drawImage(video, 0, 0, overlay.width, overlay.height);
       const imageData = ctx.getImageData(
@@ -58,11 +58,7 @@ async function startScan() {
         if (isValidUrl(code.data)) {
           // QR code is valid and contains the required substring
           isScanning = false;
-          stopScan();
-          showSuccessDialog(code.data); // Display success dialog
-          provideHapticFeedback(); // Trigger haptic feedback
-
-          resetView();
+          await handleValidScan(code.data); // Handle valid scan with vibration and dialog
           return;
         }
       }
@@ -83,6 +79,15 @@ function isValidUrl(data) {
   } catch (_) {
     return false;
   }
+}
+
+async function handleValidScan(url) {
+  // Provide haptic feedback and display dialog
+  provideHapticFeedback();
+  await new Promise((resolve) => setTimeout(resolve, 500)); // Wait for vibration to complete
+  showSuccessDialog(url);
+  stopScan();
+  resetView();
 }
 
 function provideHapticFeedback() {
