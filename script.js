@@ -39,7 +39,7 @@ async function startScan() {
   overlay.height = video.videoHeight;
   isScanning = true;
 
-  const scan = async () => {
+  const scan = () => {
     if (isScanning && video.readyState === video.HAVE_ENOUGH_DATA) {
       ctx.drawImage(video, 0, 0, overlay.width, overlay.height);
       const imageData = ctx.getImageData(
@@ -54,12 +54,15 @@ async function startScan() {
       });
 
       if (code) {
+        console.log(`Detected QR Code: ${code.data}`); // Debugging: Log the detected code
         // Validate the scanned QR code
         if (isValidUrl(code.data)) {
-          // QR code is valid and contains the required substring
+          console.log('Valid QR Code detected.'); // Debugging: Log valid QR code
           isScanning = false;
-          await handleValidScan(code.data); // Handle valid scan with vibration and dialog
+          handleValidScan(code.data);
           return;
+        } else {
+          console.log('Invalid QR Code detected.'); // Debugging: Log invalid QR code
         }
       }
     }
@@ -76,13 +79,13 @@ function isValidUrl(data) {
   try {
     const url = new URL(data);
     return url.href.includes("qr.eventmagic.com"); // Accept URLs containing this substring
-  } catch (_) {
+  } catch (error) {
+    console.log(`Invalid URL: ${data} - Error: ${error.message}`); // Debugging: Log invalid URL
     return false;
   }
 }
 
 async function handleValidScan(url) {
-  // Provide haptic feedback and display dialog
   provideHapticFeedback();
   await new Promise((resolve) => setTimeout(resolve, 500)); // Wait for vibration to complete
   showSuccessDialog(url);
@@ -93,6 +96,8 @@ async function handleValidScan(url) {
 function provideHapticFeedback() {
   if (navigator.vibrate) {
     navigator.vibrate(500); // Vibrate for 500ms
+  } else {
+    console.log('Vibration not supported on this device.'); // Debugging: Log if vibration is unavailable
   }
 }
 
