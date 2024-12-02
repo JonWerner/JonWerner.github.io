@@ -86,8 +86,8 @@ function isValidUrl(data) {
 }
 
 async function handleValidScan(url) {
-  provideHapticFeedback();
-  await new Promise((resolve) => setTimeout(resolve, 500)); // Wait for vibration to complete
+  // provideHapticFeedback();
+  // await new Promise((resolve) => setTimeout(resolve, 500)); // Wait for vibration to complete
   showSuccessDialog(url);
   stopScan();
   resetView();
